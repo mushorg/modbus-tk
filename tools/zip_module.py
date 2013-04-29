@@ -10,7 +10,10 @@
 #
 
 import zipfile
-import glob, os, sys
+import glob
+import os
+import sys
+
 
 class ZipArchive:
 
@@ -20,7 +23,7 @@ class ZipArchive:
             if os.path.isfile(filename):
                 exclude_me = False
                 for exclude in self.exclude_list:
-                    if filename.find(exclude)!=-1:
+                    if filename.find(exclude) != -1:
                         exclude_me = True
                         break
                 if not exclude_me:
@@ -29,8 +32,7 @@ class ZipArchive:
                     self.archive.write(filename, name, zipfile.ZIP_DEFLATED)
         
     def run(self, folder, name):
-        self.exclude_list = (".svn", ".pyc", "build", "tools", "release", ".egg-info",
-             "dist", ".externalTool", ".settings", ".hg")
+        self.exclude_list = (".pyc", "build", "tools", "release", ".egg-info", "dist", ".settings", ".git")
         self.folder = folder
         self.archive = zipfile.ZipFile(name+".zip", "w")
         os.path.walk(self.folder, ZipArchive.zip_it, self)
@@ -39,8 +41,8 @@ class ZipArchive:
 if __name__ == "__main__":
     arch = ZipArchive()
     old_dir = os.getcwd()
-    wkdir = os.path.abspath(os.path.dirname(sys.argv[0])+"\\..")
-    os.chdir(wkdir+"\\tools")
+    wkdir = os.path.abspath(os.path.dirname(sys.argv[0]) + "\\..")
+    os.chdir(wkdir + "\\tools")
     arch.run(wkdir, "modbus-tk")
     os.chdir(old_dir)
     print "done"
